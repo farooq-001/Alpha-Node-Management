@@ -14,6 +14,9 @@ pip3 show flask paramiko gunicorn
 nano nodes.conf
 
 #N1,0.0.0.0,<username>,<password>
+
 N1,127.0.0.0,bfarooq,123456
+
 N2,127.0.0.1,bfarooq,123456
+
 #ect....
