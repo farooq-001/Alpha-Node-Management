@@ -1,4 +1,4 @@
-# Alpha-Node-Management
+# Alpha-Node-Management installation steps:
 
 git clone https://github.com/farooq-001/Alpha-Node-Management.git
 
@@ -8,6 +8,7 @@ chmod +x setup.sh
 
 ./setup.sh
 
+source myenv/bin/activate
 pip3 show flask paramiko gunicorn
 
 # Add the nodes:
