@@ -1,25 +1,50 @@
-sudo apt update
-sudo apt install python3 python3-pip
-cd /home/opt/NodeManagement
-python3 -m venv myenv
-pip3 install flask paramiko  gunicorn
+#!/bin/bash
 
-sudo nano /etc/systemd/system/alpha-nodes.service
+# Function to install packages using apt
+install_apt() {
+    echo "Updating apt repository and installing packages..."
+    sudo apt update
+    sudo apt install -y python3 python3-pip
+}
 
-[Unit]
-Description=Gunicorn instance to serve Alpha Nodes
-After=network.target
+# Function to install packages using yum
+install_yum() {
+    echo "Updating yum repository and installing packages..."
+    sudo yum update -y
+    sudo yum install -y python3 python3-pip
+}
 
-[Service]
-#User=snb-tech
-#Group=snb-tech
-WorkingDirectory=/opt/NodeManagement
-ExecStart=/opt/NodeManagement/myenv/bin/gunicorn -w 4 -b 0.0.0.0:80 alpha-nodes:app
-Restart=always
+# Function to set up a Python virtual environment and install required packages
+setup_python() {
+    echo "Setting up Python virtual environment..."
+    cd /home/opt/NodeManagement
+    python3 -m venv myenv
+    source myenv/bin/activate
+    pip3 install flask paramiko gunicorn
+    deactivate
+}
 
-[Install]
-WantedBy=multi-user.target
+# Function to manage systemd service
+manage_service() {
+    echo "Reloading systemd daemon and managing alpha-nodes service..."
+    sudo systemctl daemon-reload
+    sudo systemctl start alpha-nodes
+    sudo systemctl enable alpha-nodes
+}
 
-sudo systemctl daemon-reload
-sudo systemctl start alpha-nodes
-sudo systemctl enable alpha-nodes
+# Check for package manager and call appropriate function
+if command -v apt-get &> /dev/null; then
+    install_apt
+elif command -v yum &> /dev/null; then
+    install_yum
+else
+    echo "Unsupported package manager. Exiting."
+    exit 1
+fi
+
+# Set up Python environment and manage service
+setup_python
+manage_service
+
+echo "Setup complete!"
+
