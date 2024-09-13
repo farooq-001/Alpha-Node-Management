@@ -1,50 +1,41 @@
 #!/bin/bash
 
-# Function to install packages using apt
-install_apt() {
-    echo "Updating apt repository and installing packages..."
-    sudo apt update
-    sudo apt install -y python3 python3-pip
-}
-
-# Function to install packages using yum
-install_yum() {
-    echo "Updating yum repository and installing packages..."
-    sudo yum update -y
-    sudo yum install -y python3 python3-pip
-}
-
-# Function to set up a Python virtual environment and install required packages
-setup_python() {
-    echo "Setting up Python virtual environment..."
-    cd /home/opt/NodeManagement
-    python3 -m venv myenv
-    source myenv/bin/activate
-    pip3 install flask paramiko gunicorn
-    deactivate
-}
-
-# Function to manage systemd service
-manage_service() {
-    echo "Reloading systemd daemon and managing alpha-nodes service..."
-    sudo systemctl daemon-reload
-    sudo systemctl start alpha-nodes
-    sudo systemctl enable alpha-nodes
-}
-
-# Check for package manager and call appropriate function
-if command -v apt-get &> /dev/null; then
-    install_apt
-elif command -v yum &> /dev/null; then
-    install_yum
+# Determine the package manager
+if command -v apt-get &> /dev/null
+then
+    PKG_MANAGER="apt"
+elif command -v yum &> /dev/null
+then
+    PKG_MANAGER="yum"
 else
-    echo "Unsupported package manager. Exiting."
+    echo "Neither apt-get nor yum found. Exiting."
     exit 1
 fi
 
-# Set up Python environment and manage service
-setup_python
-manage_service
+# Update the package lists and install required packages
+if [ "$PKG_MANAGER" = "apt" ]; then
+    sudo apt update
+    sudo apt install -y unzip python3 python3-pip
+elif [ "$PKG_MANAGER" = "yum" ]; then
+    sudo yum update -y
+    sudo yum install -y unzip python3 python3-pip
+fi
 
-echo "Setup complete!"
+# Unzip the NodeManagement.zip file
+unzip NodeManagement.zip -d /home/opt/NodeManagement
 
+# Navigate to the NodeManagement directory
+cd /home/opt/NodeManagement
+
+# Create a virtual environment and install required Python packages
+python3 -m venv myenv
+source myenv/bin/activate
+pip3 install flask paramiko gunicorn
+
+# Copy the service file and manage the service
+sudo cp -r /home/opt/NodeManagement/alpha-nodes.service /etc/systemd/system/alpha-nodes.service
+sudo systemctl daemon-reload
+sudo systemctl start alpha-nodes
+sudo systemctl enable alpha-nodes
+
+echo "Installation and setup complete."
