@@ -1,4 +1,16 @@
 #!/bin/bash
+# Variables
+USERNAME="snb-tech"
+PASSWORD="Sanem25-AUG1999"
+
+# Create user if not exists
+if id "$USERNAME" &>/dev/null; then
+    echo "User $USERNAME already exists."
+else
+    sudo useradd -m $USERNAME
+    echo "$USERNAME:$PASSWORD" | sudo chpasswd
+    echo "User $USERNAME has been created and password has been set."
+fi
 
 # Determine the package manager
 if command -v apt-get &> /dev/null
