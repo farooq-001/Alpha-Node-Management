@@ -35,10 +35,10 @@ fi
 
 # Unzip the NodeManagement.zip file
 unzip Alpha-Node-Management.zip 
-mv Alpha-Node-Management  /opt/NodeManagement
+cp -r  Alpha-Node-Management  /opt/
 
 # Navigate to the NodeManagement directory
-cd /opt/NodeManagement
+cd /opt/Alpha-Node-Management
 
 # Create a virtual environment and install required Python packages
 python3 -m venv myenv
