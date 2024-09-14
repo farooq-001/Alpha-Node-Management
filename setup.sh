@@ -34,10 +34,11 @@ elif [ "$PKG_MANAGER" = "yum" ]; then
 fi
 
 # Unzip the NodeManagement.zip file
-unzip NodeManagement.zip -d /home/opt/NodeManagement
+unzip Alpha-Node-Management.zip 
+mv Alpha-Node-Management  /opt/NodeManagement
 
 # Navigate to the NodeManagement directory
-cd /home/opt/NodeManagement
+cd /opt/NodeManagement
 
 # Create a virtual environment and install required Python packages
 python3 -m venv myenv
@@ -45,7 +46,7 @@ source myenv/bin/activate
 pip3 install flask paramiko gunicorn
 
 # Copy the service file and manage the service
-sudo cp -r /home/opt/NodeManagement/alpha-nodes.service /etc/systemd/system/alpha-nodes.service
+sudo cp -r alpha-nodes.service /etc/systemd/system/alpha-nodes.service
 sudo systemctl daemon-reload
 sudo systemctl start alpha-nodes
 sudo systemctl enable alpha-nodes
