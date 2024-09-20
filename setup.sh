@@ -35,7 +35,7 @@ fi
 
 # Unzip the NodeManagement.zip file
 unzip NodeManagement.zip 
-mv  NodeManagement    /opt/
+cp -r  Alpha-Node-Management     /opt/NodeManagement   
 
 # Navigate to the NodeManagement directory
 cd /opt/NodeManagement
