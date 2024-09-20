@@ -34,9 +34,10 @@ elif [ "$PKG_MANAGER" = "yum" ]; then
 fi
 
 # Unzip the NodeManagement.zip file
-unzip NodeManagement.zip 
-cp -r  Alpha-Node-Management     /opt/NodeManagement   
 
+sudo unzip NodeManagement.zip -d /opt/
+
+sleep 1
 # Navigate to the NodeManagement directory
 cd /opt/NodeManagement
 
