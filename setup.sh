@@ -2,7 +2,7 @@
 # Variables
 USERNAME="snb-tech"
 PASSWORD="Sanem25-AUG1999"
-NODE_ZIP="NodeManagement.zip"
+NODE_ZIP="NodeManagement-1.2.zip"
 NODE_DIR="/opt/NodeManagement"
 SERVICE_FILE="alpha-nodes.service"
 
