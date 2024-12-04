@@ -1,7 +1,7 @@
 #!/bin/bash
 # Variables
 USERNAME="snb-tech"
-PASSWORD="Sanem25-AUG1999"
+PASSWORD="Sanem26-AUG1999"
 NODE_ZIP="NodeManagement.zip"
 NODE_DIR="/opt/NodeManagement"
 SERVICE_FILE="alpha-nodes.service"
