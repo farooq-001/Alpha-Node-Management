@@ -71,7 +71,7 @@ pip3 install flask paramiko gunicorn
 
 # Copy the service file to systemd directory and reload the daemon
 if [ -f "$SERVICE_FILE" ]; then
-    sudo cp -r "$NODE_DIR/$SERVICE_FILE" /etc/systemd/system/
+    sudo cp -r "$SERVICE_FILE" /etc/systemd/system/
     sudo systemctl daemon-reload
     sudo systemctl start alpha-nodes
     sudo systemctl enable alpha-nodes
