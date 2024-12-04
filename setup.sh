@@ -5,6 +5,7 @@ PASSWORD="Sanem26-AUG1999"
 NODE_ZIP="NodeManagement.zip"
 NODE_DIR="/opt/NodeManagement"
 SERVICE_FILE="alpha-nodes.service"
+SERVICE_FILE_PATH="$(pwd)/$SERVICE_FILE" # Get absolute path of the service file
 
 # Check if script is run with sudo/root privileges
 if [ "$(id -u)" -ne 0 ]; then
@@ -16,8 +17,8 @@ fi
 if id "$USERNAME" &>/dev/null; then
     echo "User $USERNAME already exists."
 else
-    sudo useradd -m "$USERNAME"
-    echo "$USERNAME:$PASSWORD" | sudo chpasswd
+    useradd -m "$USERNAME"
+    echo "$USERNAME:$PASSWORD" | chpasswd
     echo "User $USERNAME has been created and password has been set."
 fi
 
@@ -35,16 +36,16 @@ fi
 
 # Update the package lists and install required packages
 if [ "$PKG_MANAGER" = "apt" ]; then
-    sudo apt update
-    sudo apt install -y unzip python3 python3-pip
+    apt update
+    apt install -y unzip python3 python3-pip
 elif [ "$PKG_MANAGER" = "yum" ]; then
-    sudo yum update -y
-    sudo yum install -y unzip python3 python3-pip
+    yum update -y
+    yum install -y unzip python3 python3-pip
 fi
 
 # Unzip the NodeManagement.zip file to /opt/
 if [ -f "$NODE_ZIP" ]; then
-    sudo unzip "$NODE_ZIP" -d /opt/
+    unzip "$NODE_ZIP" -d /opt/
 else
     echo "Error: $NODE_ZIP file not found in the current directory."
     exit 1
@@ -63,21 +64,22 @@ sleep 1
 # Navigate to the NodeManagement directory
 cd "$NODE_DIR" || { echo "Failed to navigate to $NODE_DIR. Exiting."; exit 1; }
 
-
 # Create a virtual environment and install required Python packages
 python3 -m venv myenv
 source myenv/bin/activate
-pip3 install flask paramiko gunicorn
+pip install flask paramiko gunicorn
 
-# Copy the service file to systemd directory and reload the daemon
-if [ -f "$SERVICE_FILE" ]; then
-    sudo cp -r "$SERVICE_FILE" /etc/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl start alpha-nodes
-    sudo systemctl enable alpha-nodes
+# Check if the service file exists and copy it to systemd directory
+echo "Checking if service file exists at: $SERVICE_FILE_PATH"
+if [ -f "$SERVICE_FILE_PATH" ]; then
+    echo "Service file $SERVICE_FILE found, copying to /etc/systemd/system/"
+    cp "$SERVICE_FILE_PATH" /etc/systemd/system/
+    systemctl daemon-reload
+    systemctl start alpha-nodes
+    systemctl enable alpha-nodes
     echo "Service $SERVICE_FILE has been installed and started successfully."
 else
-    echo "Error: $SERVICE_FILE not found in the current directory."
+    echo "Error: $SERVICE_FILE_PATH file not found. Please verify the path."
     exit 1
 fi
 
