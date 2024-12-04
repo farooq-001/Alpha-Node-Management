@@ -62,7 +62,7 @@ sleep 1
 
 # Navigate to the NodeManagement directory
 cd "$NODE_DIR" || { echo "Failed to navigate to $NODE_DIR. Exiting."; exit 1; }
-mv /opt/NodeManagement-1.2  /opt/NodeManagement
+
 
 # Create a virtual environment and install required Python packages
 python3 -m venv myenv
