@@ -6,7 +6,7 @@ After=network.target
 #User=snb-tech
 #Group=snb-tech
 WorkingDirectory=/opt/NodeManagement
-ExecStart=/opt/NodeManagement/myenv/bin/gunicorn -w 4 -b 0.0.0.0:80 alpha-nodes:app
+ExecStart=/opt/NodeManagement/myenv/bin/gunicorn -w 4 -b 0.0.0.0:01 alpha-nodes:app
 Restart=always
 
 [Install]
